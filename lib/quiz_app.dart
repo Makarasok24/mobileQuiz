@@ -19,7 +19,7 @@ class QuizApp extends StatefulWidget {
 }
 
 class _QuizAppState extends State<QuizApp> {
-  
+  Submission submission = Submission();
   QuizState _currentState = QuizState.notStarted;
   int currenQuestion = 0;
   void startQuiz(){
@@ -29,15 +29,22 @@ class _QuizAppState extends State<QuizApp> {
     });
   }
 
-  void finished(){
+  void finished(String selectAnswer){
     setState(() {
-      Submission();
       // _currentState = QuizState.finished;
+      submission.addAnswer(widget.quiz.questions[currenQuestion], selectAnswer);
       if(currenQuestion < widget.quiz.questions.length - 1){
         currenQuestion++;
       }else{
         _currentState = QuizState.finished;
       }
+    });
+  }
+
+  void restart(){
+    setState(() {
+      _currentState = QuizState.notStarted;
+      submission.removeAnswers();
     });
   }
 
@@ -50,8 +57,12 @@ class _QuizAppState extends State<QuizApp> {
         body: _currentState == QuizState.notStarted 
         ? WelcomeScreen(isStarted: startQuiz,quizTitle:widget.quiz.title)
         : _currentState == QuizState.started
-        ? QuestionScreen(onTap: finished,question: widget.quiz.questions[currenQuestion])
-        : const ResultScreen(),
+        ? QuestionScreen(
+          onTap: (selectAnswer){
+            finished(selectAnswer);
+          },
+          question: widget.quiz.questions[currenQuestion])
+        : ResultScreen(onRestart: restart,submission: submission,quiz:widget.quiz),
       ),
     );
   }
