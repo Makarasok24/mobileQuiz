@@ -12,7 +12,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,        
         children: [
           Text(
             'You scored ${submission.getScore()} of ${quiz.questions.length} points!',
@@ -21,10 +21,10 @@ class ResultScreen extends StatelessWidget {
               color: Colors.white
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           ...quiz.questions.map((item) => Column(
             children: [
-              Text(item.title),
+              Text(item.title,style: const TextStyle(fontSize: 25),),
               ...item.possibleAnswers.map((answers) => Column(
                 children: [
                   Row(
@@ -37,6 +37,7 @@ class ResultScreen extends StatelessWidget {
                         color: submission.getAnswerFor(item)?.selectAnswer == answers && answers==item.goodAnswer ? Colors.green 
                         :submission.getAnswerFor(item)?.selectAnswer == answers && answers!=item.goodAnswer ? Colors.red
                         :Colors.black,
+                        fontSize: 20,
                         ),
                       )
                     ],
